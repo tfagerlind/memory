@@ -6,15 +6,14 @@ mpmath.mp.dps = 1000
 def nth_decimal(n):
     return str(mpmath.pi)[1+n]
 
-l = [x for x in range(30)]
+group_indices = [index for index in range(30)]
 
-random.shuffle(l)
+random.shuffle(group_indices)
 
-while l:
-    x = l.pop()
-    group = [nth_decimal(1 + x * 5 + 0),
-             nth_decimal(1 + x * 5 + 1),
-             nth_decimal(1 + x * 5 + 2),
-             nth_decimal(1 + x * 5 + 3),
-             nth_decimal(1 + x * 5 + 4)]
-    print("".join(group))
+while group_indices:
+    group_index = group_indices.pop()
+    group = [nth_decimal(1 + group_index * 5 + decimal_index)
+            for decimal_index
+            in range(5)]
+    group_as_string = "".join(group)
+    print(group_as_string)
