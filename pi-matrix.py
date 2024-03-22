@@ -15,8 +15,26 @@ def get_group(index):
             for decimal_index
             in range(5)]
 
+def group_as_string(group):
+    return "".join(group)
+
 while group_indices:
     index = group_indices.pop()
     group = get_group(index=index)
-    group_as_string = "".join(group)
-    print(group_as_string)
+    print(group_as_string(group))
+
+    if index == 0:
+        before = "None"
+    else:
+        before = get_group(index=index-1)
+
+    if index == 29:
+        after = "None"
+    else:
+        after = get_group(index=index+1)
+
+    input()
+
+    before_as_string = group_as_string(before)
+    after_as_string = group_as_string(after)
+    print(f"before: {before_as_string} after: {after_as_string}")
