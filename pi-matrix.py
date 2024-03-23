@@ -1,3 +1,19 @@
+"""
+Improvements:
+* sleep just before next question
+* more clear separations between questions
+* timer
+* correct answer counter
+* prompt with "before" and "after"
+* tell how many is left
+
+Remark:
+* wrong order rooms
+* wrong order places
+* wrong translation from fonem to number
+* answer after instead of before
+"""
+
 import sys
 import mpmath
 import random
