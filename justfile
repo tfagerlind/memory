@@ -3,7 +3,7 @@ build:
     docker build -t pi-matrix --progress plain .
 
 check-python: build
-    docker run -t --rm -v "${PWD}:/apps" alpine/flake8:6.0.0 py-matrix.py
+    docker run -t --rm -v "${PWD}:/apps" alpine/flake8:6.0.0 pi-matrix.py
 
 # Check docker file
 check-dockerfile:
