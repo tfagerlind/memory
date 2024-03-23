@@ -1,14 +1,20 @@
+import sys
 import mpmath
 import random
 
-mpmath.mp.dps = 1000
+group_count = int(sys.argv[1])
+
+GROUP_SIZE = 5
+
+# ensure that we have enough precision by multiplying with two
+mpmath.mp.dps = 2 * GROUP_SIZE * group_count
 
 
 def nth_decimal(n):
     return str(mpmath.pi)[1+n]
 
 
-group_indices = [index for index in range(30)]
+group_indices = [index for index in range(group_count)]
 
 random.shuffle(group_indices)
 
@@ -33,7 +39,7 @@ while group_indices:
     else:
         before = get_group(index=index-1)
 
-    if index == 29:
+    if index == group_count - 1:
         after = "None"
     else:
         after = get_group(index=index+1)
