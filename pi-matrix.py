@@ -44,8 +44,20 @@ while group_indices:
     else:
         after = get_group(index=index+1)
 
-    input()
 
     before_as_string = group_as_string(before)
     after_as_string = group_as_string(after)
-    print(f"before: {before_as_string} after: {after_as_string}")
+
+    guess = input()
+
+    if guess.strip() == before_as_string:
+        print("Correct!")
+    else:
+        print(f"Incorrect. Correct answer was {before_as_string}.")
+
+    guess = input()
+
+    if guess.strip() == after_as_string:
+        print("Correct!")
+    else:
+        print(f"Incorrect. Correct answer was {after_as_string}.")
