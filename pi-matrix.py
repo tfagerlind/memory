@@ -1,11 +1,6 @@
 """
 Improvements:
-* sleep just before next question
-* more clear separations between questions
 * timer
-* correct answer counter
-* prompt with "before" and "after"
-* tell how many is left
 
 Remark:
 * wrong order rooms
@@ -14,9 +9,10 @@ Remark:
 * answer after instead of before
 """
 
-import sys
-import mpmath
 import random
+import sys
+import time
+import mpmath
 
 group_count = int(sys.argv[1])
 
@@ -45,7 +41,22 @@ def group_as_string(group):
     return "".join(group)
 
 
+def check_and_respond_to_answer(actual, expected):
+    if actual == expected:
+        print("Correct!")
+        return True
+    else:
+        print(f"Incorrect. Correct answer was {expected}.")
+        return False
+
+
+total_question_count = len(group_indices)
+incorrect_answers = 0
+
 while group_indices:
+    print("Progress: {}/{}\n".format(total_question_count - len(group_indices),
+                                      total_question_count))
+
     index = group_indices.pop()
     group = get_group(index=index)
     print(group_as_string(group))
@@ -64,16 +75,23 @@ while group_indices:
     before_as_string = group_as_string(before)
     after_as_string = group_as_string(after)
 
-    guess = input()
+    guess = input("Before: ")
 
-    if guess.strip() == before_as_string:
-        print("Correct!")
-    else:
-        print(f"Incorrect. Correct answer was {before_as_string}.")
+    correct = check_and_respond_to_answer(guess.strip(),
+                                          before_as_string)
 
-    guess = input()
+    if not correct:
+        incorrect_answers += 1
 
-    if guess.strip() == after_as_string:
-        print("Correct!")
-    else:
-        print(f"Incorrect. Correct answer was {after_as_string}.")
+    guess = input("After: ")
+
+    correct = check_and_respond_to_answer(guess.strip(),
+                                          after_as_string)
+
+    if not correct:
+        incorrect_answers += 1
+
+    time.sleep(1)
+    print("")
+
+print(f"Complete! Number of incorrect answers: {incorrect_answers}")
