@@ -14,19 +14,27 @@ import sys
 import time
 import mpmath
 
-group_count = int(sys.argv[1])
-
 GROUP_SIZE = 5
 
-# ensure that we have enough precision by multiplying with two
-mpmath.mp.dps = 2 * GROUP_SIZE * group_count
+room_start = int(sys.argv[1]) - 1
+room_count = int(sys.argv[2])
 
+group_start = 5 * room_start
+group_count = 5 * room_count
+
+# ensure that we have enough precision by multiplying with two
+mpmath.mp.dps = 2 * GROUP_SIZE * (group_start + group_count)
+
+print(f"This challenge will test {5 * group_count} decimals of pi,")
+print(f"ranging from decimal {5 * group_start} to")
+print(f"decimal {5 * group_start + 5 * group_count}.")
 
 def nth_decimal(n):
     return str(mpmath.pi)[1+n]
 
 
-group_indices = [index for index in range(group_count)]
+group_indices = [index for index in range(group_start,
+                                          group_start + group_count)]
 
 random.shuffle(group_indices)
 
@@ -61,12 +69,12 @@ while group_indices:
     group = get_group(index=index)
     print(group_as_string(group))
 
-    if index == 0:
+    if index == group_start:
         before = "None"
     else:
         before = get_group(index=index-1)
 
-    if index == group_count - 1:
+    if index == group_start + group_count - 1:
         after = "None"
     else:
         after = get_group(index=index+1)
