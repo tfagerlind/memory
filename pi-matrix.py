@@ -1,14 +1,3 @@
-"""
-Improvements:
-* timer
-
-Remark:
-* wrong order rooms
-* wrong order places
-* wrong translation from fonem to number
-* answer after instead of before
-"""
-
 import random
 import sys
 import time

@@ -19,6 +19,11 @@ should be tested.
 When the program asks for a set outside of the selected scope, it will only
 accept "None" as an answer.
 
+## Improvements
+
+* timer
+* refactor interface using click
+
 # three-decimals.py
 
 This tools is aimed for practising 3-digit numbers.
