@@ -6,6 +6,29 @@ import mpmath
 import click
 
 
+def nth_decimal(n):
+    return str(mpmath.pi)[1+n]
+
+
+def get_group(index):
+    return [nth_decimal(1 + index * 5 + decimal_index)
+            for decimal_index
+            in range(5)]
+
+
+def group_as_string(group):
+    return "".join(group)
+
+
+def check_and_respond_to_answer(actual, expected):
+    if actual == expected:
+        print("Correct!")
+        return True
+    else:
+        print(f"Incorrect. Correct answer was {expected}.")
+        return False
+
+
 def main(room_start, room_count):
     GROUP_SIZE = 5
 
@@ -21,34 +44,10 @@ def main(room_start, room_count):
     print(f"ranging from decimal {5 * group_start} to")
     print(f"decimal {5 * group_start + 5 * group_count}.")
 
-    def nth_decimal(n):
-        return str(mpmath.pi)[1+n]
-
-
     group_indices = [index for index in range(group_start,
                                               group_start + group_count)]
 
     random.shuffle(group_indices)
-
-
-    def get_group(index):
-        return [nth_decimal(1 + index * 5 + decimal_index)
-                for decimal_index
-                in range(5)]
-
-
-    def group_as_string(group):
-        return "".join(group)
-
-
-    def check_and_respond_to_answer(actual, expected):
-        if actual == expected:
-            print("Correct!")
-            return True
-        else:
-            print(f"Incorrect. Correct answer was {expected}.")
-            return False
-
 
     total_question_count = len(group_indices)
     incorrect_answers = 0
