@@ -2,93 +2,106 @@ import random
 import sys
 import time
 import mpmath
-
-GROUP_SIZE = 5
-
-room_start = int(sys.argv[1]) - 1
-room_count = int(sys.argv[2])
-
-group_start = 5 * room_start
-group_count = 5 * room_count
-
-# ensure that we have enough precision by multiplying with two
-mpmath.mp.dps = 2 * GROUP_SIZE * (group_start + group_count)
-
-print(f"This challenge will test {5 * group_count} decimals of pi,")
-print(f"ranging from decimal {5 * group_start} to")
-print(f"decimal {5 * group_start + 5 * group_count}.")
-
-def nth_decimal(n):
-    return str(mpmath.pi)[1+n]
+import click
 
 
-group_indices = [index for index in range(group_start,
-                                          group_start + group_count)]
+def main(room_start, room_count):
+    GROUP_SIZE = 5
 
-random.shuffle(group_indices)
+    room_start = room_start - 1  # make zero-indexed
 
+    group_start = 5 * room_start
+    group_count = 5 * room_count
 
-def get_group(index):
-    return [nth_decimal(1 + index * 5 + decimal_index)
-            for decimal_index
-            in range(5)]
+    # ensure that we have enough precision by multiplying with two
+    mpmath.mp.dps = 2 * GROUP_SIZE * (group_start + group_count)
 
+    print(f"This challenge will test {5 * group_count} decimals of pi,")
+    print(f"ranging from decimal {5 * group_start} to")
+    print(f"decimal {5 * group_start + 5 * group_count}.")
 
-def group_as_string(group):
-    return "".join(group)
-
-
-def check_and_respond_to_answer(actual, expected):
-    if actual == expected:
-        print("Correct!")
-        return True
-    else:
-        print(f"Incorrect. Correct answer was {expected}.")
-        return False
+    def nth_decimal(n):
+        return str(mpmath.pi)[1+n]
 
 
-total_question_count = len(group_indices)
-incorrect_answers = 0
+    group_indices = [index for index in range(group_start,
+                                              group_start + group_count)]
 
-while group_indices:
-    print("Progress: {}/{}\n".format(total_question_count - len(group_indices),
-                                      total_question_count))
-
-    index = group_indices.pop()
-    group = get_group(index=index)
-    print(group_as_string(group))
-
-    if index == group_start:
-        before = "None"
-    else:
-        before = get_group(index=index-1)
-
-    if index == group_start + group_count - 1:
-        after = "None"
-    else:
-        after = get_group(index=index+1)
+    random.shuffle(group_indices)
 
 
-    before_as_string = group_as_string(before)
-    after_as_string = group_as_string(after)
+    def get_group(index):
+        return [nth_decimal(1 + index * 5 + decimal_index)
+                for decimal_index
+                in range(5)]
 
-    guess = input("Before: ")
 
-    correct = check_and_respond_to_answer(guess.strip(),
-                                          before_as_string)
+    def group_as_string(group):
+        return "".join(group)
 
-    if not correct:
-        incorrect_answers += 1
 
-    guess = input("After: ")
+    def check_and_respond_to_answer(actual, expected):
+        if actual == expected:
+            print("Correct!")
+            return True
+        else:
+            print(f"Incorrect. Correct answer was {expected}.")
+            return False
 
-    correct = check_and_respond_to_answer(guess.strip(),
-                                          after_as_string)
 
-    if not correct:
-        incorrect_answers += 1
+    total_question_count = len(group_indices)
+    incorrect_answers = 0
 
-    time.sleep(1)
-    print("")
+    while group_indices:
+        print("Progress: {}/{}\n".format(total_question_count - len(group_indices),
+                                          total_question_count))
 
-print(f"Complete! Number of incorrect answers: {incorrect_answers}")
+        index = group_indices.pop()
+        group = get_group(index=index)
+        print(group_as_string(group))
+
+        if index == group_start:
+            before = "None"
+        else:
+            before = get_group(index=index-1)
+
+        if index == group_start + group_count - 1:
+            after = "None"
+        else:
+            after = get_group(index=index+1)
+
+
+        before_as_string = group_as_string(before)
+        after_as_string = group_as_string(after)
+
+        guess = input("Before: ")
+
+        correct = check_and_respond_to_answer(guess.strip(),
+                                              before_as_string)
+
+        if not correct:
+            incorrect_answers += 1
+
+        guess = input("After: ")
+
+        correct = check_and_respond_to_answer(guess.strip(),
+                                              after_as_string)
+
+        if not correct:
+            incorrect_answers += 1
+
+        time.sleep(1)
+        print("")
+
+    print(f"Complete! Number of incorrect answers: {incorrect_answers}")
+
+@click.command()
+@click.argument('room_start', type=int)
+@click.argument('room_count', type=int)
+def pi_matrix(room_start, room_count):
+    """Challenge your pi decimal skills."""
+    main(room_start, room_count)
+
+
+if __name__ == '__main__':
+    pi_matrix()

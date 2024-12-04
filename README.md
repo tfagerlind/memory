@@ -22,7 +22,6 @@ accept "None" as an answer.
 ## Improvements
 
 * timer
-* refactor interface using click
 
 # three-decimals.py
 
