@@ -6,8 +6,19 @@ import mpmath
 import click
 
 
+GROUP_SIZE = 5
+
+
 def nth_decimal(n):
-    return str(mpmath.pi)[1+n]
+    # Probably enough precision, as long as we only care about the first 10000
+    # decimals. Rounding issues that can happen when there are multiple nines
+    # in a row, for example, and that is something we need to keep in mind.
+    if n > 10000:
+        raise NotImplementedError("We don't use enough precison"
+                                  " to be able to guarantee the"
+                                  " reliability of that big numbers.")
+    with mpmath.mp.workdps(20000):
+        return str(mpmath.pi)[1+n]
 
 
 def get_group(index):
@@ -30,15 +41,10 @@ def check_and_respond_to_answer(actual, expected):
 
 
 def main(room_start, room_count):
-    GROUP_SIZE = 5
-
     room_start = room_start - 1  # make zero-indexed
 
     group_start = 5 * room_start
     group_count = 5 * room_count
-
-    # ensure that we have enough precision by multiplying with two
-    mpmath.mp.dps = 2 * GROUP_SIZE * (group_start + group_count)
 
     print(f"This challenge will test {5 * group_count} decimals of pi,")
     print(f"ranging from decimal {5 * group_start} to")
