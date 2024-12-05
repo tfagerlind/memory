@@ -22,6 +22,9 @@ accept "None" as an answer.
 ## Improvements
 
 * timer
+* refactor main method
+* add tests
+* introduce ruff
 
 # three-decimals.py
 

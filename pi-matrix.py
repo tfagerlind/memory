@@ -1,6 +1,5 @@
 #!/bin/env python3
 import random
-import sys
 import time
 import mpmath
 import click
@@ -59,8 +58,8 @@ def main(room_start, room_count):
     incorrect_answers = 0
 
     while group_indices:
-        print("Progress: {}/{}\n".format(total_question_count - len(group_indices),
-                                          total_question_count))
+        remaining_question_count = total_question_count - len(group_indices)
+        print(f"Progress: {remaining_question_count}/{total_question_count}")
 
         index = group_indices.pop()
         group = get_group(index=index)
@@ -75,7 +74,6 @@ def main(room_start, room_count):
             after = "None"
         else:
             after = get_group(index=index+1)
-
 
         before_as_string = group_as_string(before)
         after_as_string = group_as_string(after)
@@ -100,6 +98,7 @@ def main(room_start, room_count):
         print("")
 
     print(f"Complete! Number of incorrect answers: {incorrect_answers}")
+
 
 @click.command()
 @click.argument('room_start', type=int)
