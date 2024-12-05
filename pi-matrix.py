@@ -45,28 +45,19 @@ def get_questions(group_start, group_count):
 
     random.shuffle(group_indices)
 
-    while group_indices:
-        index = group_indices.pop()
-        group = get_group(index=index)
+    for index in group_indices:
+        middle = get_group(index=index)
 
-        middle_as_string = group_as_string(group)
+        before = ("None"
+                  if index == group_start
+                  else get_group(index=index-1))
+        after = ("None"
+                 if index == group_start + group_count - 1
+                 else get_group(index=index+1))
 
-        if index == group_start:
-            before = "None"
-        else:
-            before = get_group(index=index-1)
-
-        if index == group_start + group_count - 1:
-            after = "None"
-        else:
-            after = get_group(index=index+1)
-
-        before_as_string = group_as_string(before)
-        after_as_string = group_as_string(after)
-
-        yield (before_as_string,
-               middle_as_string,
-               after_as_string)
+        yield (group_as_string(before),
+               group_as_string(middle),
+               group_as_string(after))
 
 
 def main(room_start, room_count):
