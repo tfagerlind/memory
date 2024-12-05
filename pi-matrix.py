@@ -45,8 +45,6 @@ def get_questions(group_start, group_count):
 
     random.shuffle(group_indices)
 
-    questions = []
-
     while group_indices:
         index = group_indices.pop()
         group = get_group(index=index)
@@ -66,12 +64,9 @@ def get_questions(group_start, group_count):
         before_as_string = group_as_string(before)
         after_as_string = group_as_string(after)
 
-        question = (before_as_string,
-                    middle_as_string,
-                    after_as_string)
-        questions.append(question)
-
-    return questions
+        yield (before_as_string,
+               middle_as_string,
+               after_as_string)
 
 
 def main(room_start, room_count):
@@ -86,7 +81,7 @@ def main(room_start, room_count):
 
     questions = get_questions(group_start, group_count)
 
-    total_question_count = len(questions)
+    total_question_count = group_count
     incorrect_answers = 0
 
     for index, question in enumerate(questions):
