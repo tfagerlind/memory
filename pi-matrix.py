@@ -39,31 +39,19 @@ def check_and_respond_to_answer(actual, expected):
         return False
 
 
-def main(room_start, room_count):
-    room_start = room_start - 1  # make zero-indexed
-
-    group_start = 5 * room_start
-    group_count = 5 * room_count
-
-    print(f"This challenge will test {5 * group_count} decimals of pi,")
-    print(f"ranging from decimal {5 * group_start} to")
-    print(f"decimal {5 * group_start + 5 * group_count}.")
-
+def get_questions(group_start, group_count):
     group_indices = [index for index in range(group_start,
                                               group_start + group_count)]
 
     random.shuffle(group_indices)
 
-    total_question_count = len(group_indices)
-    incorrect_answers = 0
+    questions = []
 
     while group_indices:
-        remaining_question_count = total_question_count - len(group_indices)
-        print(f"Progress: {remaining_question_count}/{total_question_count}")
-
         index = group_indices.pop()
         group = get_group(index=index)
-        print(group_as_string(group))
+
+        middle_as_string = group_as_string(group)
 
         if index == group_start:
             before = "None"
@@ -77,6 +65,39 @@ def main(room_start, room_count):
 
         before_as_string = group_as_string(before)
         after_as_string = group_as_string(after)
+
+        question = (before_as_string,
+                    middle_as_string,
+                    after_as_string)
+        questions.append(question)
+
+    return questions
+
+
+def main(room_start, room_count):
+    room_start = room_start - 1  # make zero-indexed
+
+    group_start = 5 * room_start
+    group_count = 5 * room_count
+
+    print(f"This challenge will test {5 * group_count} decimals of pi,")
+    print(f"ranging from decimal {5 * group_start} to")
+    print(f"decimal {5 * group_start + 5 * group_count}.")
+
+    questions = get_questions(group_start, group_count)
+
+    total_question_count = len(questions)
+    incorrect_answers = 0
+
+    for index, question in enumerate(questions):
+        (before_as_string,
+         middle_as_string,
+         after_as_string) = question
+
+        completed_question_count = index
+        print(f"Progress: {completed_question_count}/{total_question_count}")
+
+        print(middle_as_string)
 
         guess = input("Before: ")
 
