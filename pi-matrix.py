@@ -1,4 +1,5 @@
 #!/bin/env python3
+from dataclasses import dataclass
 import random
 import time
 import mpmath
@@ -30,6 +31,22 @@ def group_as_string(group):
     return "".join(group)
 
 
+@dataclass
+class Group:
+    index: int
+
+    def __repr__(self):
+        return ("None"
+                if self.index == -1
+                else group_as_string(get_group(self.index)))
+
+    def before(self):
+        return self if self.index == -1 else Group(self.index-1)
+
+    def after(self):
+        return Group(self.index+1)
+
+
 def check_and_respond_to_answer(actual, expected):
     if actual == expected:
         print("Correct!")
@@ -39,25 +56,15 @@ def check_and_respond_to_answer(actual, expected):
         return False
 
 
-def get_questions(group_start, group_count):
+def get_random_groups(group_start, group_count):
     group_indices = [index for index in range(group_start,
                                               group_start + group_count)]
 
     random.shuffle(group_indices)
 
-    for index in group_indices:
-        middle = get_group(index=index)
+    groups = [Group(index) for index in group_indices]
 
-        before = ("None"
-                  if index == group_start
-                  else get_group(index=index-1))
-        after = ("None"
-                 if index == group_start + group_count - 1
-                 else get_group(index=index+1))
-
-        yield (group_as_string(before),
-               group_as_string(middle),
-               group_as_string(after))
+    return groups
 
 
 def main(room_start, room_count):
@@ -70,25 +77,21 @@ def main(room_start, room_count):
     print(f"ranging from decimal {5 * group_start} to")
     print(f"decimal {5 * group_start + 5 * group_count}.")
 
-    questions = get_questions(group_start, group_count)
+    groups = get_random_groups(group_start, group_count)
 
     total_question_count = group_count
     incorrect_answers = 0
 
-    for index, question in enumerate(questions):
-        (before_as_string,
-         middle_as_string,
-         after_as_string) = question
-
+    for index, group in enumerate(groups):
         completed_question_count = index
         print(f"Progress: {completed_question_count}/{total_question_count}")
 
-        print(middle_as_string)
+        print(str(group))
 
         guess = input("Before: ")
 
         correct = check_and_respond_to_answer(guess.strip(),
-                                              before_as_string)
+                                              str(group.before()))
 
         if not correct:
             incorrect_answers += 1
@@ -96,7 +99,7 @@ def main(room_start, room_count):
         guess = input("After: ")
 
         correct = check_and_respond_to_answer(guess.strip(),
-                                              after_as_string)
+                                              str(group.after()))
 
         if not correct:
             incorrect_answers += 1
