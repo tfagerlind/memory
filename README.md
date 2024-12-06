@@ -24,6 +24,8 @@ accept "None" as an answer.
 * refactor main method
 * add tests
 * introduce ruff
+* time each question and store results in file
+* given the results in the file query the user of the most weak groups
 
 # three-decimals.py
 
