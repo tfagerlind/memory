@@ -23,9 +23,12 @@ accept "None" as an answer.
 
 * refactor main method
 * add tests
+* add test that check all 10000 decimals againts list downloaded from external
+  sources
 * introduce ruff
 * time each question and store results in file
 * given the results in the file query the user of the most weak groups
+* make project more mature; with a license, and prerequisites etc.
 
 # three-decimals.py
 
