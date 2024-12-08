@@ -68,6 +68,33 @@ def get_random_groups(group_start, group_count):
     return groups
 
 
+def request_group(group):
+    """Request group from user.
+
+    Returns the number of errors, i.e a number in the range 0-2
+
+    """
+
+    # ask question to user
+    print(str(group))
+
+    # take input
+    guess = input("Before: ")
+
+    # check result and respond
+    correct_before = check_and_respond_to_answer(guess.strip(),
+                                                 str(group.before()))
+
+    # take input
+    guess = input("After: ")
+
+    # check result and respond
+    correct_after = check_and_respond_to_answer(guess.strip(),
+                                                str(group.after()))
+
+    return int(not correct_before) + int(not correct_after)
+
+
 def main(room_start, room_count):
     # interpret user choices
     room_start = room_start - 1  # make zero-indexed
@@ -99,30 +126,9 @@ def main(room_start, room_count):
         # show statistics
         print(f"Progress: {completed_question_count}/{total_question_count}")
 
-        # ask question to user
-        print(str(group))
+        error_count = request_group(group)
 
-        # take input
-        guess = input("Before: ")
-
-        # check result and respond
-        correct = check_and_respond_to_answer(guess.strip(),
-                                              str(group.before()))
-
-        # bookkeeping
-        if not correct:
-            incorrect_answers += 1
-
-        # take input
-        guess = input("After: ")
-
-        # check result and respond
-        correct = check_and_respond_to_answer(guess.strip(),
-                                              str(group.after()))
-
-        # book keeping
-        if not correct:
-            incorrect_answers += 1
+        incorrect_answers += error_count
 
         # end question
         time.sleep(1)
